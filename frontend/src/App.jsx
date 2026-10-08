@@ -2,7 +2,6 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { AuthProvider, useAuth } from './lib/auth'
 import { ToastProvider } from './components/Toast'
 import Home            from './pages/Home'
-import Pricing         from './pages/Pricing'
 import Login           from './pages/Login'
 import Signup          from './pages/Signup'
 import Onboarding      from './pages/Onboarding'
@@ -39,7 +38,6 @@ export default function App() {
         <Routes>
           {/* Public */}
           <Route path="/"         element={<Home />} />
-          <Route path="/pricing"  element={<Pricing />} />
           <Route path="/login"    element={<PublicOnly><Login /></PublicOnly>} />
           <Route path="/signup"   element={<PublicOnly><Signup /></PublicOnly>} />
           <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />

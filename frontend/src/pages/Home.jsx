@@ -1,11 +1,16 @@
-import { Link } from 'react-router-dom'
-import { Leaf, UploadCloud, FileCheck2, Send, ArrowRight, CheckCircle2, TrendingDown, Shield, Zap } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import {
+  Leaf, UploadCloud, FileCheck2, Send, ArrowRight, TrendingDown, Shield, Zap,
+  HelpCircle, Lock, Globe2, FileBarChart,
+} from 'lucide-react'
+import { useAuth } from '../lib/auth'
 
 const steps = [
   {
     icon: UploadCloud,
     title: 'Connect your data',
-    text: 'Upload electricity bills, fuel logs, production and waste records — or connect them manually in minutes.',
+    text: 'Upload electricity bills, fuel logs, production and waste records — or enter them manually in minutes.',
     color: '#4CAF50',
   },
   {
@@ -30,12 +35,65 @@ const stats = [
 ]
 
 const features = [
-  { icon: TrendingDown, title: 'Emissions intelligence', desc: 'Scope 1, 2 & 3 tracking auto-computed from your raw operational data.' },
-  { icon: Shield, title: 'Compliance vault', desc: 'All reports, certificates and evidence securely stored, versioned and audit-ready.' },
-  { icon: Zap, title: 'One-click exports', desc: 'BRSR PDF and CBAM XML/CSV generated instantly, no manual formatting needed.' },
+  {
+    icon: TrendingDown,
+    title: 'Emissions intelligence',
+    desc: 'Scope 1, 2 & 3 tracking auto-computed from your raw operational data, with 12-month trends and facility-level breakdowns.',
+  },
+  {
+    icon: FileBarChart,
+    title: 'One-click BRSR & CBAM reports',
+    desc: 'Generate SEBI-compliant BRSR disclosures and EU CBAM declarations instantly — real PDF and CSV downloads, no manual formatting.',
+  },
+  {
+    icon: Shield,
+    title: 'Supplier risk scoring',
+    desc: 'Sustainability scores across your whole supply chain, with automatic flags for suppliers missing emissions data.',
+  },
+  {
+    icon: Lock,
+    title: 'Compliance vault',
+    desc: 'All reports, certificates and evidence stored, versioned and audit-ready in one secure place.',
+  },
+  {
+    icon: Globe2,
+    title: 'Built for Indian exporters',
+    desc: 'Designed around SEBI BRSR and EU CBAM rules for MSMEs exporting steel, cement, aluminium and more.',
+  },
+  {
+    icon: Zap,
+    title: 'Deadline tracking',
+    desc: 'Filing deadlines, overdue alerts and a live activity feed, so nothing slips through before the regulator notices.',
+  },
 ]
 
-function PublicNav() {
+const faqs = [
+  {
+    q: 'What is BRSR and who needs to file it?',
+    a: 'BRSR (Business Responsibility and Sustainability Reporting) is mandated by SEBI for listed companies and increasingly required from their top suppliers. MSMEs supplying to listed companies often need to comply.',
+  },
+  {
+    q: 'What is CBAM and does it apply to my business?',
+    a: 'CBAM (Carbon Border Adjustment Mechanism) applies if you export cement, steel, aluminium, fertilizers, electricity, or hydrogen to the EU. From 2026, importers must declare the embedded emissions.',
+  },
+  {
+    q: 'Do I need technical expertise to use GreenComply?',
+    a: 'No. You just upload your existing records — electricity bills, fuel logs, production volumes. GreenComply maps them to the correct regulatory fields and generates the report automatically.',
+  },
+  {
+    q: 'Can I try the product without paying?',
+    a: 'Yes. The demo runs against a fully populated steel manufacturer dataset (Himalayan Steel Works). No credit card, no configuration required — just create an account and explore.',
+  },
+  {
+    q: 'Is my data secure?',
+    a: 'All data is stored in Supabase Postgres with row-level security. Reports and evidence are stored in encrypted Supabase Storage. We never share your data with third parties.',
+  },
+]
+
+function PublicNav({ active }) {
+  const { isAuthed } = useAuth()
+  const appLink = isAuthed ? '/app' : '/login'
+  const appLabel = isAuthed ? 'Dashboard' : 'Log in'
   return (
     <header className="nav-glass fixed top-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
@@ -46,12 +104,13 @@ function PublicNav() {
           <span className="font-semibold text-ink tracking-tight">GreenComply</span>
         </Link>
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-ink-soft">
-          <a href="#how" className="hover:text-ink transition-colors">How it works</a>
-          <Link to="/pricing" className="hover:text-ink transition-colors">Pricing</Link>
+          <a href="#how" className={`hover:text-ink transition-colors ${active === 'how' ? 'text-forest-500' : ''}`}>How it works</a>
+          <a href="#features" className={`hover:text-ink transition-colors ${active === 'features' ? 'text-forest-500' : ''}`}>Features</a>
+          <a href="#faq" className={`hover:text-ink transition-colors ${active === 'faq' ? 'text-forest-500' : ''}`}>FAQ</a>
         </nav>
         <div className="flex items-center gap-3">
-          <Link to="/login" className="text-sm font-medium text-ink-soft hover:text-ink transition-colors hidden sm:block">
-            Log in
+          <Link to={appLink} className="text-sm font-medium text-ink-soft hover:text-ink transition-colors hidden sm:block">
+            {appLabel}
           </Link>
           <Link
             to="/signup"
@@ -66,9 +125,45 @@ function PublicNav() {
 }
 
 export default function Home() {
+  const location = useLocation()
+  const { isAuthed } = useAuth()
+  const appLink = isAuthed ? '/app' : '/login'
+  const appLabel = isAuthed ? 'Dashboard' : 'Log in'
+  const [active, setActive] = useState('')
+
+  // Highlight the nav item for the section currently in view.
+  useEffect(() => {
+    if (location.hash) {
+      const el = document.getElementById(location.hash.slice(1))
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 50)
+    }
+  }, [location.hash])
+
+  useEffect(() => {
+    const sections = ['how', 'features', 'faq']
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) setActive(e.target.id)
+        }
+      },
+      { rootMargin: '-30% 0px -60% 0px' },
+    )
+    sections.forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+    return () => observer.disconnect()
+  }, [])
+
+  const scrollTo = (e, id) => {
+    e.preventDefault()
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
     <div className="hero-bg min-h-screen">
-      <PublicNav />
+      <PublicNav active={active} />
 
       {/* Hero */}
       <section className="pt-36 pb-28 px-6 lg:px-10 max-w-7xl mx-auto">
@@ -98,6 +193,7 @@ export default function Home() {
             </Link>
             <a
               href="#how"
+              onClick={(e) => scrollTo(e, 'how')}
               className="flex items-center gap-2 font-medium px-6 py-3.5 rounded-xl transition-all text-ink-soft hover:text-ink"
               style={{ border: '1px solid rgba(255,255,255,0.1)' }}
             >
@@ -118,7 +214,7 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section id="how" className="py-24 px-6 lg:px-10" style={{ background: 'rgba(15,30,17,0.6)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <section id="how" className="py-24 px-6 lg:px-10" style={{ background: 'rgba(15,30,17,0.6)', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-semibold text-ink">How it works</h2>
@@ -146,11 +242,11 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="py-24 px-6 lg:px-10">
+      <section id="features" className="py-24 px-6 lg:px-10">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-14">
-            <h2 className="text-3xl font-semibold text-ink">Built for Indian MSMEs exporting to the EU</h2>
-            <p className="text-ink-soft mt-3 max-w-xl mx-auto">Everything you need to comply with SEBI BRSR and EU CBAM, in one platform.</p>
+            <h2 className="text-3xl font-semibold text-ink">Everything you need to stay compliant</h2>
+            <p className="text-ink-soft mt-3 max-w-xl mx-auto">Purpose-built for Indian MSMEs exporting to the EU, from data entry to filed report.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
             {features.map((f) => (
@@ -166,6 +262,27 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section id="faq" className="py-24 px-6 lg:px-10" style={{ background: 'rgba(15,30,17,0.6)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div className="max-w-3xl mx-auto">
+          <div className="flex items-center gap-3 justify-center mb-12">
+            <HelpCircle size={22} className="text-forest-500" />
+            <h2 className="text-2xl font-semibold text-ink">Frequently asked questions</h2>
+          </div>
+          <div className="space-y-4">
+            {faqs.map((faq) => (
+              <details key={faq.q} className="card p-5 group cursor-pointer">
+                <summary className="flex items-center justify-between font-medium text-ink text-sm list-none">
+                  {faq.q}
+                  <span className="text-ink-soft text-lg ml-4 group-open:rotate-45 transition-transform duration-200">+</span>
+                </summary>
+                <p className="text-sm text-ink-soft mt-3 leading-relaxed">{faq.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Banner */}
       <section className="py-20 px-6 lg:px-10">
         <div className="max-w-4xl mx-auto glass-card p-12 text-center" style={{ border: '1px solid rgba(76,175,80,0.25)' }}>
@@ -175,9 +292,9 @@ export default function Home() {
             <Link to="/signup" className="flex items-center gap-2 bg-forest-500 text-white font-semibold px-7 py-3.5 rounded-xl hover:bg-forest-400 transition-all shadow-lg shadow-forest-500/25">
               Start free demo <ArrowRight size={16} />
             </Link>
-            <Link to="/pricing" className="font-medium px-7 py-3.5 rounded-xl text-ink-soft hover:text-ink transition-all" style={{ border: '1px solid rgba(255,255,255,0.1)' }}>
-              View pricing
-            </Link>
+            <a href="#how" onClick={(e) => scrollTo(e, 'how')} className="font-medium px-7 py-3.5 rounded-xl text-ink-soft hover:text-ink transition-all" style={{ border: '1px solid rgba(255,255,255,0.1)' }}>
+              See how it works
+            </a>
           </div>
         </div>
       </section>
@@ -190,9 +307,9 @@ export default function Home() {
             <span>© 2026 GreenComply. All rights reserved.</span>
           </div>
           <div className="flex items-center gap-6">
-            <Link to="/pricing" className="hover:text-ink transition-colors">Pricing</Link>
-            <Link to="/login" className="hover:text-ink transition-colors">Login</Link>
-            <span>Built for MSME exporters in India</span>
+            <a href="#how" onClick={(e) => scrollTo(e, 'how')} className="hover:text-ink transition-colors">How it works</a>
+            <a href="#faq" onClick={(e) => scrollTo(e, 'faq')} className="hover:text-ink transition-colors">FAQ</a>
+            <Link to={appLink} className="hover:text-ink transition-colors">{appLabel}</Link>
           </div>
         </div>
       </footer>

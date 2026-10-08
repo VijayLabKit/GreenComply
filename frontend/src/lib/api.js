@@ -21,7 +21,7 @@ api.interceptors.response.use(
   (error) => {
     if (error?.response?.status === 401) {
       const path = window.location.pathname
-      const onPublicPage = ['/', '/login', '/signup', '/pricing'].includes(path)
+      const onPublicPage = ['/', '/login', '/signup'].includes(path)
       if (!onPublicPage) {
         localStorage.removeItem('gc_token')
         localStorage.removeItem('gc_user')
