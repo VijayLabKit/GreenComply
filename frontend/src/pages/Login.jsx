@@ -8,7 +8,7 @@ export default function Login() {
   const location = useLocation()
   const [params] = useSearchParams()
   const { login } = useAuth()
-  const [form, setForm] = useState({ email: 'vijay@himalayansteel.example', password: '' })
+  const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState(params.get('expired') ? 'Your session expired — please log in again.' : '')
   const [loading, setLoading] = useState(false)
 
@@ -93,9 +93,7 @@ export default function Login() {
           </p>
         </div>
 
-        <p className="text-xs text-ink-soft text-center mt-6">
-          Demo: vijay@himalayansteel.example / greencomply-demo
-        </p>
+
       </div>
     </div>
   )

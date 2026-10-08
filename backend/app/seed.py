@@ -10,6 +10,7 @@ Requires SUPABASE_URL and SUPABASE_KEY (service role key, so RLS doesn't
 block inserts) in backend/.env.
 """
 
+import os
 from datetime import datetime, timedelta, timezone
 
 from app.config import SUPABASE_CONFIGURED
@@ -21,8 +22,12 @@ from app.mock_data import (
     KPIS, DEADLINES, ACTIVITY_FEED,
 )
 
-DEMO_EMAIL = "vijay@himalayansteel.example"
-DEMO_PASSWORD = "greencomply-demo"
+# Admin login for the seeded company. Override both via .env before seeding:
+#   ADMIN_EMAIL=you@company.com
+#   ADMIN_PASSWORD=<a strong password>
+# The password is hashed with bcrypt before storage and never logged in full.
+DEMO_EMAIL = os.getenv("ADMIN_EMAIL", "admin.greencomply@gmail.com")
+DEMO_PASSWORD = os.getenv("ADMIN_PASSWORD", "CKw7iqCwrndE9c!;")
 
 
 def _ago(**kwargs) -> str:

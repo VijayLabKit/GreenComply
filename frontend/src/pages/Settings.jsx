@@ -18,7 +18,7 @@ const SECTORS = [
 ]
 
 const team = [
-  { name: 'Vijay Ishan',    role: 'Admin',  email: 'vijay@himalayansteel.example' },
+  { name: 'Compliance Admin', role: 'Admin',  email: 'admin.greencomply@gmail.com' },
   { name: 'Anjali Rao',     role: 'Editor', email: 'anjali@himalayansteel.example' },
   { name: 'Pradeep Sharma', role: 'Viewer', email: 'pradeep@himalayansteel.example' },
 ]

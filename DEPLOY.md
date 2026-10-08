@@ -41,12 +41,20 @@ python -m app.seed
 This inserts "Himalayan Steel Works Pvt. Ltd." with 12 months of emissions,
 14 suppliers (6 flagged, incl. one with zero data), 6 CBAM shipments (1
 overdue), a BRSR report with partial principles, 12 documents and a staggered
-activity feed. It prints the demo login:
+activity feed.
+
+**Admin login** — defaults to `admin.greencomply@gmail.com` with a generated
+password printed by the script. To use your own credentials, set them in
+`backend/.env` *before* seeding:
 
 ```
-email:    vijay@himalayansteel.example
-password: greencomply-demo
+ADMIN_EMAIL=you@company.com
+ADMIN_PASSWORD=<strong password>
 ```
+
+> Re-seeding: the script does not wipe existing rows. To start over, delete
+> the company row in the Supabase Table Editor (cascades to all child data)
+> and run the seed again with the credentials you want.
 
 Sanity check: `GET https://<your-api>/` (after step 2) should report
 `"database": "supabase"`.
@@ -105,7 +113,7 @@ Interactive API docs: `https://<your-api>.onrender.com/docs`.
    `https://greencomply-xyz.vercel.app`) and add it to `CORS_ORIGINS` on
    Render, then redeploy the backend once. Done.
 
-**Verify:** open the Vercel URL → log in with the demo credentials →
+**Verify:** open the Vercel URL → log in with your seeded admin credentials →
 Dashboard shows live data from Supabase; BRSR "Export PDF report" downloads
 a real PDF; CBAM "Export CSV" downloads a real CSV.
 

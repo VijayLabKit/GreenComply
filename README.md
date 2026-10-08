@@ -49,14 +49,15 @@ so every page still renders fully even if the backend isn't running.
    SUPABASE_KEY=your-service-role-key   # Project Settings → API
    JWT_SECRET=<a long random string>
    ```
-4. Seed the demo company (12 months of data, 8 suppliers, BRSR + CBAM
+4. Seed the demo company (12 months of data, 14 suppliers, BRSR + CBAM
    records, documents):
    ```bash
    cd backend
    python -m app.seed
    ```
-   This prints a demo login: `vijay@himalayansteel.example` /
-   `greencomply-demo`.
+   Admin login defaults to `admin.greencomply@gmail.com`; override the email
+   and password via `ADMIN_EMAIL` / `ADMIN_PASSWORD` in `backend/.env`
+   before seeding (see DEPLOY.md).
 5. Restart the backend — `GET /` will now report `"database": "supabase"`
    and every route reads/writes Postgres instead of the in-memory seed.
 6. Point the frontend at Supabase directly for optional features (e.g.
