@@ -1,0 +1,151 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Brand greens */
+  --color-forest-50:  #0C1A0E;
+  --color-forest-100: #152A18;
+  --color-forest-200: #1E3D22;
+  --color-forest-300: #2A5530;
+  --color-forest-400: #3D7A44;
+  --color-forest-500: #4CAF50;
+  --color-forest-600: #66BB6A;
+  --color-forest-700: #81C784;
+  --color-forest-900: #A5D6A7;
+
+  /* Text */
+  --color-ink:      #E8F5E9;
+  --color-ink-soft: rgba(232,245,233,0.50);
+
+  /* Accent */
+  --color-amber:  #FFB300;
+  --color-danger: #EF5350;
+
+  /* Surface layers */
+  --color-surface-0: #080F09;
+  --color-surface-1: #0F1E11;
+  --color-surface-2: #152419;
+  --color-surface-3: #1B2E1E;
+}
+
+/* ── Base ──────────────────────────────────────────────────────────── */
+html, body {
+  background-color: var(--color-surface-0);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-forest-300) transparent;
+}
+
+/* ── Gradient logo ─────────────────────────────────────────────────── */
+.gradient-header {
+  background: linear-gradient(135deg, #2E7D32 0%, #43A047 50%, #66BB6A 100%);
+}
+
+/* ── Cards ─────────────────────────────────────────────────────────── */
+.card {
+  background: var(--color-surface-1);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.07);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+}
+
+.glass-card {
+  background: rgba(15, 30, 17, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 16px;
+  border: 1px solid rgba(76,175,80,0.18);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+/* ── Inputs ────────────────────────────────────────────────────────── */
+.input-dark {
+  background: var(--color-surface-2);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 10px;
+  color: var(--color-ink);
+  padding: 0.6rem 0.85rem;
+  font-size: 0.875rem;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.input-dark::placeholder { color: var(--color-ink-soft); }
+.input-dark:focus { border-color: var(--color-forest-500); box-shadow: 0 0 0 2px rgba(76,175,80,0.18); }
+
+select.input-dark option { background: var(--color-surface-2); color: var(--color-ink); }
+
+/* ── Glow pulse ────────────────────────────────────────────────────── */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(76,175,80,0.25); }
+  50%       { box-shadow: 0 0 40px rgba(76,175,80,0.45); }
+}
+.glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+
+/* ── Rise in ───────────────────────────────────────────────────────── */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-rise { animation: rise 0.45s ease-out both; }
+
+/* ── Fade in ───────────────────────────────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.animate-fade-in { animation: fade-in 0.4s ease both; }
+
+/* ── Slide up ──────────────────────────────────────────────────────── */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up    { animation: slide-up 0.55s cubic-bezier(0.16,1,0.3,1) both; }
+.animate-slide-up-d1 { animation: slide-up 0.55s 0.1s cubic-bezier(0.16,1,0.3,1) both; }
+.animate-slide-up-d2 { animation: slide-up 0.55s 0.2s cubic-bezier(0.16,1,0.3,1) both; }
+.animate-slide-up-d3 { animation: slide-up 0.55s 0.3s cubic-bezier(0.16,1,0.3,1) both; }
+
+/* ── Hero gradient background ──────────────────────────────────────── */
+.hero-bg {
+  background:
+    radial-gradient(ellipse 70% 50% at 60% 20%, rgba(76,175,80,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 10% 80%, rgba(30,61,34,0.4) 0%, transparent 70%),
+    var(--color-surface-0);
+}
+
+/* ── Public nav glass ──────────────────────────────────────────────── */
+.nav-glass {
+  background: rgba(8,15,9,0.80);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ── Progress bar track ────────────────────────────────────────────── */
+.progress-track {
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  overflow: hidden;
+  height: 7px;
+}
+
+/* ── Modal backdrop ────────────────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
