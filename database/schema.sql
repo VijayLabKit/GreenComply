@@ -169,7 +169,9 @@ create table if not exists activity_log (
 alter table companies enable row level security;
 alter table users enable row level security;
 alter table data_entries enable row level security;
+alter table data_source_status enable row level security;
 alter table emission_records enable row level security;
+alter table emission_factors enable row level security;
 alter table brsr_reports enable row level security;
 alter table cbam_declarations enable row level security;
 alter table suppliers enable row level security;
