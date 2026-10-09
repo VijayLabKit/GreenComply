@@ -44,7 +44,7 @@ export function ToastProvider({ children }) {
           return (
             <div
               key={t.id}
-              className="glass-card flex items-start gap-3 p-3.5 animate-slide-up"
+              className="glass-popover flex items-start gap-3 p-3.5 animate-slide-up"
               style={{ borderLeft: `3px solid ${color}` }}
               role="status"
             >

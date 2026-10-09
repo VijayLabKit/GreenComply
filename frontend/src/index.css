@@ -74,6 +74,15 @@ section[id] {
   box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 }
 
+/* Floating popovers (bell menu, user menu) sit on top of dense content,
+   so they must be nearly opaque — 75% glass let card text bleed through. */
+.glass-popover {
+  background: #0d190f;
+  border-radius: 14px;
+  border: 1px solid rgba(76,175,80,0.22);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+}
+
 /* ── Inputs ────────────────────────────────────────────────────────── */
 .input-dark {
   background: var(--color-surface-2);

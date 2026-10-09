@@ -82,7 +82,7 @@ export default function TopBar({ title, subtitle, onMenu }) {
           </button>
           {bellOpen && (
             <div
-              className="absolute right-0 top-10 w-80 glass-card p-3 animate-fade-in"
+              className="absolute right-0 top-10 w-80 glass-popover p-3 animate-fade-in"
               style={{ maxHeight: 340, overflowY: 'auto' }}
             >
               <p className="text-xs font-semibold text-ink-soft px-2 pb-2">Deadline reminders</p>
@@ -129,7 +129,7 @@ export default function TopBar({ title, subtitle, onMenu }) {
             <ChevronDown size={14} className={`text-ink-soft hidden sm:block transition-transform ${menuOpen ? 'rotate-180' : ''}`} />
           </button>
           {menuOpen && (
-            <div className="absolute right-0 top-12 w-56 glass-card p-2 animate-fade-in">
+            <div className="absolute right-0 top-12 w-56 glass-popover p-2 animate-fade-in">
               <div className="px-3 py-2 mb-1" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
                 <p className="text-xs text-ink-soft">Signed in as</p>
                 <p className="text-sm text-ink truncate">{user?.email ?? '—'}</p>

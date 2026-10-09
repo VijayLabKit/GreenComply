@@ -16,6 +16,12 @@ export function useApi(path, { fallback = null, enabled = true } = {}) {
   const [error, setError] = useState(null)
   const [usingFallback, setUsingFallback] = useState(false)
   const alive = useRef(true)
+  // Pages pass inline object literals as `fallback`, which are new references
+  // every render. Keeping it in a ref keeps `load` stable, so the effect below
+  // doesn't refire forever (that caused an endless fetch loop and a page stuck
+  // on its skeleton).
+  const fallbackRef = useRef(fallback)
+  useEffect(() => { fallbackRef.current = fallback }, [fallback])
 
   useEffect(() => {
     alive.current = true
@@ -31,8 +37,8 @@ export function useApi(path, { fallback = null, enabled = true } = {}) {
       if (!alive.current) return
       const payload = res.data
       const empty = payload == null || (Array.isArray(payload) && payload.length === 0)
-      if (empty && fallback !== null) {
-        setData(fallback)
+      if (empty && fallbackRef.current !== null) {
+        setData(fallbackRef.current)
         setUsingFallback(true)
       } else {
         setData(payload)
@@ -41,14 +47,14 @@ export function useApi(path, { fallback = null, enabled = true } = {}) {
     } catch (e) {
       if (!alive.current) return
       setError(e?.response?.data?.detail || e?.message || 'Request failed')
-      if (fallback !== null) {
-        setData(fallback)
+      if (fallbackRef.current !== null) {
+        setData(fallbackRef.current)
         setUsingFallback(true)
       }
     } finally {
       if (alive.current) setLoading(false)
     }
-  }, [path, enabled, fallback])
+  }, [path, enabled])
 
   useEffect(() => { load() }, [load])
 

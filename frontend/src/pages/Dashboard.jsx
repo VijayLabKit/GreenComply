@@ -136,13 +136,18 @@ export default function Dashboard() {
           <div className="grid grid-cols-3 gap-2">
             {brsrCategoryScores.map((c) => (
               <div key={c.category} className="flex flex-col items-center">
-                <ResponsiveContainer width="100%" height={100}>
-                  <RadialBarChart innerRadius="70%" outerRadius="100%" data={[{ value: c.score, fill: '#4CAF50' }]} startAngle={90} endAngle={-270}>
-                    <PolarAngleAxis type="number" domain={[0, 100]} angleAxisId={0} tick={false} />
-                    <RadialBar background={{ fill: 'rgba(255,255,255,0.06)' }} dataKey="value" cornerRadius={8} />
-                  </RadialBarChart>
-                </ResponsiveContainer>
-                <p className="text-sm font-semibold text-ink -mt-4">{c.score}%</p>
+                <div className="relative w-full">
+                  <ResponsiveContainer width="100%" height={100}>
+                    <RadialBarChart innerRadius="70%" outerRadius="100%" data={[{ value: c.score, fill: '#4CAF50' }]} startAngle={90} endAngle={-270}>
+                      <PolarAngleAxis type="number" domain={[0, 100]} angleAxisId={0} tick={false} />
+                      <RadialBar background={{ fill: 'rgba(255,255,255,0.06)' }} dataKey="value" cornerRadius={8} />
+                    </RadialBarChart>
+                  </ResponsiveContainer>
+                  {/* Centered in the ring so the arc can never cover the text */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <p className="text-sm font-semibold text-ink">{c.score}%</p>
+                  </div>
+                </div>
                 <p className="text-xs text-ink-soft mt-2 text-center">{c.category}</p>
               </div>
             ))}
